@@ -1,0 +1,59 @@
+//未测试 ，可以帮忙改一下小BUG 
+#define MAXQSIZE 1000
+#define OVERFLOW -2
+#define TRUE 1
+#define FALSE -1
+typedef int QElemType_CSq;
+typedef struct
+{
+	QElemType_CSq *base;
+	int front;
+	int rear;
+}CSqQueue;
+int InitQueue(CSqQueue *Q)
+{
+	(*Q).base=(QElemType_CSq *)malloc(MAXQSIZE*sizeof(QElemtype_CSq));
+	if(!(*Q).base)
+	   exit(OVERFLOW);
+	(*Q).front=(*Q).rear=0;
+	return TRUE;
+}
+void ClearQueue_CSq(CSqQueue *Q)
+{
+	(*Q).front=(*Q).rear=0;
+}
+void DestroyQueue_CSq(CSqQueue *Q)
+{
+	if((*Q).base)
+	   free((*Q).base);
+	(*Q).base=NULL;
+	(*Q).front=(*Q).rear=0;
+}
+int QueueEmpty_CSq(CSqQueue Q)
+{
+	if(Q.front==Q.rear)
+	  return TRUE;
+	else
+	  return FALSE;
+}
+int QueueLength_CSq(CSqQueue Q)
+{
+	return (Q.rear-Q.front+MAXQSIZE)%MAXQSIZE;
+}
+int GetHead_CSq(CSqQueue Q,QElemType_CSq *e)
+{
+	if(Q.front==Q.rear)
+	   return FALSE;
+	*e=Q.base[Q.front];
+	return OK;
+}
+int DeQueue_CSq(CSqQueue *Q,QElemType_CSq *e)
+{
+	if((*Q).front==(*Q).rear)
+	   return FALSE;
+	*e=(*Q).front;
+	(*Q).front=((*Q).front+1)%MAXQSIZE;
+	return TRUE;
+}
+
+
