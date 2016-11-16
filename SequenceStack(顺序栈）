@@ -1,0 +1,84 @@
+#include<stdio.h>
+#include<string.h>
+#include <stdlib.h>
+typedef struct
+{
+int *base;
+int *top;
+int stacksize;
+}SqStack;
+int initstack_Sq(SqStack *S);
+int DestroyStack_Sq(SqStack *S);
+int ClearStack_Sq(SqStack *S);
+int StackLength_Sq(SqStack S);
+int StackEmpty_Sq(SqStack S);
+int GetTop_Sq(SqStack S,int *e);
+int Push_Sq(SqStack *S,int e);
+int Pop_Sq(SqStack S,int *e);
+int main(void)
+{
+SqStack S;
+initstack_Sq(&S);
+while(1)
+{
+  int a;
+  Pop_Sq(S,&a);
+  printf("%d\n",a);
+}
+
+}
+int initstack_Sq(SqStack *S)
+{
+(*S).base=(int *)malloc(100*sizeof(SqStack));
+(*S).top=(*S).base;
+(*S).stacksize=100;
+}
+int DestroyStack_Sq(SqStack *S)
+{
+free((*S).base);
+(*S).base=NULL;
+(*S).top=NULL;
+(*S).stacksize=0;
+return 1;
+} 
+int ClearStack_Sq(SqStack *S)
+{
+(*S).top=(*S).base;
+return 1;
+}
+int StackLength_Sq(SqStack S)
+{
+return S.top-S.base;
+}
+int StackEmpty_Sq(SqStack S)
+{
+if(S.top==S.base)
+  return 1;
+else
+  return 0;
+}
+int GetTop_Sq(SqStack S,int *e)
+{
+if(S.top==S.base)
+  return 1;
+*e=*(S.top-1);
+return 1;
+}
+int Push_Sq(SqStack *S,int e)
+{
+if(((*S).top-(*S).base)>=(*S).stacksize)
+{
+(*S).base=(int *)realloc((*S).base,((*S).stacksize+10)*sizeof(SqStack));
+(*S).top+=(*S).stacksize;
+(*S).stacksize+=10;
+}
+*((*S).top)=e;
+(*S).top++;
+return 1;
+}
+int Pop_Sq(SqStack S,int *e)
+{
+S.top--;
+*e=*(S.top);
+return 1;
+}
