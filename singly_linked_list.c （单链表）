@@ -1,0 +1,214 @@
+//singly_linked_list 
+//有些特殊情况没有管
+#include<stdio.h>
+#include<malloc.h>
+typedef int status;
+typedef int elemtype;
+#define TURE 1
+#define FALSE 0
+typedef struct node
+{
+elemtype data;
+struct node * next;
+}node;
+typedef node * LinkList;
+status InitialList(LinkList * L);
+status CreateList_1(LinkList L, int n);//头插法 
+status CreateList_2(LinkList L, int n);//尾插法
+void show_linklist(LinkList L, int n);
+status ClearList(LinkList L);
+void DestroyList_L(LinkList *L);
+status ListEmpty_L(LinkList L);
+int ListLength_L(LinkList L);
+status GetElem_L(LinkList L, int i, int *e);
+int LocateElem_L(LinkList L, int e);
+status PriorElem_L(LinkList L, int cur_e, int *pre_e);//用pre_e接收cur_e的前驱。
+status NextElem_L(LinkList L,int cur_e,int *next_e);
+status ListInsert_L(LinkList L, int i, int e);//在单链表L第i个位置之前插入e.
+status ListDelete_L(LinkList L,int i,int *e);//删除单链表L第i个位置的值，并用e接收
+int main(void)
+{
+LinkList L1, L2;
+InitialList(&L1);
+//InitialList(&L2);
+int n;
+printf("enter the number of node:");
+scanf("%d", &n);
+CreateList_2(L1, n);
+//CreateList_1(L2, n);
+show_linklist(L1, n);
+//show_linklist(L2, n);
+while(1)
+{
+int a,b;
+printf("please enter the xth:");
+scanf("%d",&a);
+printf("please enter the element:");
+scanf("%d",&b);
+ListDelete_L(L1,a,&b);
+ListInsert_L(L1,a,b);
+show_linklist(L1,4);
+}
+}
+status InitialList(LinkList * L)
+{
+*L = (LinkList)malloc(sizeof(node));
+(*L)->next = NULL;
+}
+status CreateList_1(LinkList L, int n)//头插法 
+{
+LinkList p;
+for (int i = 0;i < n;i++)
+{
+p = (LinkList)malloc(sizeof(node));
+printf("请输入第%d个节点:", i + 1);
+scanf("%d", &(p->data));
+p->next = L->next;
+L->next = p;
+}
+return TURE;
+}
+status CreateList_2(LinkList L, int n)//尾插法
+{
+LinkList p, q;
+p = L;
+for (int i = 0;i < n;i++)
+{
+q = (LinkList)malloc(sizeof(node));
+printf("请输入第%d个节点:", i + 1);
+scanf("%d", &q->data);
+p->next = q;
+p=q;
+}
+q->next = NULL;
+return TURE;
+}
+void show_linklist(LinkList L, int n)
+{
+LinkList p = L->next;
+for (int i = 0;i < n;i++)
+{
+printf("%d\n", p->data);
+p = p->next;
+}
+printf("aha!\n");
+}
+status ClearList(LinkList L)
+{
+if(!L)
+  return FALSE;
+LinkList p=L->next,q;
+while(p)
+{
+q=p->next;
+free(p);
+p=q;
+}
+L->next=NULL;
+return TURE;
+}
+void DestroyList_L(LinkList *L)
+{
+LinkList p=(*L),q;
+while(p)
+{
+q=p->next;
+free(p);
+p=q;
+}
+}
+status ListEmpty_L(LinkList L)
+{
+if((L!=NULL)&&(L->next==NULL))
+  return TURE;
+
+else
+  return FALSE;
+}
+int ListLength_L(LinkList L)
+{
+LinkList p=L->next;
+int i=0;
+while(p)
+{
+i++;
+p=p->next;
+}
+return i;
+}
+status GetElem_L(LinkList L, int i, int *e)
+{
+LinkList p=L,q;
+while(i--)
+{
+q=p->next;
+p=q;
+}
+*e=p->data;
+}
+int LocateElem_L(LinkList L, int e)
+{
+LinkList p=L->next;
+int i=1;
+while(p)
+{
+if(p->data==e)
+  break;
+p=p->next;
+i++;
+}
+if(p!=NULL) return i;
+else return FALSE;
+}
+status PriorElem_L(LinkList L, int cur_e, int *pre_e)
+{
+LinkList q=L,p=q->next;
+if(p->data==cur_e) 
+  return FALSE;
+while((p!=NULL)&&(p->data!=cur_e))
+{
+p=p->next;
+q=q->next;
+}
+if(p==NULL)
+  return FALSE;
+*pre_e=q->data;
+}
+status NextElem_L(LinkList L,int cur_e,int *next_e)
+{
+LinkList q=L->next,p=q->next;
+while((p!=NULL)&&(q->data!=cur_e))
+{
+q=q->next;
+p=p->next;
+}
+if(p==NULL)
+  return FALSE;
+*next_e=p->data;
+}
+status ListInsert_L(LinkList L,int i,int e)//在单链表L第i个位置之前插入e.
+{
+LinkList p=L,q;
+i--;
+while(i--)
+{
+p=p->next;
+}
+q=(LinkList)malloc(sizeof(node));
+q->data=e;
+q->next=p->next;
+p->next=q;
+}
+status ListDelete_L(LinkList L,int i,int *e)//删除单链表L第i个位置的值，并用e接收
+{
+LinkList p=L,q;
+i--;
+while(i--)
+{
+p=p->next;
+}
+q=p->next;
+p->next=q->next;
+free(q);
+return TURE;
+}
