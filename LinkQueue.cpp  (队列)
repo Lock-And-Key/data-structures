@@ -1,0 +1,114 @@
+#include<stdio.h>
+#include<stdlib.h>
+#define TRUE 1
+#define FALSE 0
+typedef struct
+{
+	int *elem;
+	int length;
+	int listsize;
+}SqList;
+
+int main(void)
+{
+	
+	
+	
+}
+
+
+int InitList_Sq(SqList *L)
+{
+	(*L).elem=(int *)malloc(5*sizeof(int));
+	if(!(*L).elem)
+	   exit(OVERFLOW)
+	(*L).length=0;
+	(*L).listsize=5;
+	return TRUE;
+}
+void ClearList_Sq(Sqlist *L)
+{
+	(*L).length=0;
+}
+void DestroyList_Sq(SqList *L)
+{
+	free((*L).elem);
+	(*L).elem=NULL;
+	(*L).length=0;
+	(*L).listsize=0;
+}
+int ListEmpty_Sq(SqList L)
+{
+	return L.length==0?TRUE:FALSE;	
+}
+int ListLength_Sq(SqList L)
+{
+	return L.length;
+}
+int GetElem_Sq(SqList L,int i,int *e)
+{
+	if(i<1||i>L.length)
+	  return ERROR;
+	else
+	  *e=L.elem[i-1];
+	return TRUE;
+}
+int LocateElem_Sq(SqList L,int e,int(Compare)(int,int))
+{
+	int i=1;
+	while(i<=L.length&&!Compare(e,L.elem[i-1]))
+	  i++;
+	if(i<=L.length)
+	  return i;
+	else
+	  return FALSE;
+}
+int PriorElem_Sq(SqList L,int cur_e,int *pre_e)
+{
+	int i=1;
+	if(L.elem[0]!=cur_e)
+	{
+		while(i<L.length&&L.elem[i]!=cur_e)
+		   ++i;
+		if(i<L.length)
+		{
+			*pre_e=L.elem[i-1];
+			return TRUE;
+		}
+	}
+	return FALSE;
+}
+int ListInsert_Sq(SqLsit *L,int i,int e)
+{
+	int *newbase;
+	int *p,*q;
+	if(i<1||i>(*L).length+1)
+	   return FALSE;
+	if((*L).length>=(*L).listsize)
+	{
+		newbase=(int *)realloc((*L).elem,((L).listsize+5)*sizeof(int));
+		if(!newbase)
+		   exit(OVERFLOW);
+		(*L).elem=newbase;
+		(*L).listsize+=5;
+	}
+	q=&(*L).elem[i-1];
+	for(p=&(*L).elem[(*L).length-1];p>=q;--p)
+	 *(p+1)=*p;
+	*q=e;
+	(*L).length++;
+}
+int ListDelete_Sq(SqList *L,int i,int *e)
+{
+	int j;
+	int *p,*q;
+	if(i<1||i>(*L).length)
+	   return FALSE;
+	p=&(*L).elem[i-1];
+	*e=*p;
+	q=(*L).elem+(*L).length-1;
+	for(++p;p<=q;++p)
+	  *(p-1)=*p;
+	(*L).length--;
+	return TRUE;
+}
