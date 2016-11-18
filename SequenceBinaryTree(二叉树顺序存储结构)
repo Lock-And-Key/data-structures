@@ -1,0 +1,223 @@
+//没有编译，小bug应该不少； 
+#include<stdio.h>
+#include<stdlib.h>
+#define MAX_TREE_SIZE 100
+#define TRUE 1
+#define FALSE 0
+typedef char TElemType;
+typedef TElemType SqBiTree[MAX_TREE_SIZE];
+typedef struct
+{
+	int level;
+	int order;
+}Position;
+void InitBiTree(SqBiTree T)
+{
+	int i;
+	for(i=0;i<MAX_TREE_SIZE;i++)
+	   T[i]='\0';
+}
+void ClearBiTree_Sq(SqBiTree T)
+{
+	int i;
+	for(i=0;i<MAX_TREE_SIZE;i++)
+	   T[i]='\0';
+}
+int BiTreeEmpty_Sq(SqBiTree T)
+{
+	return T[0]=='\0'?TRUE:FALSE;
+}
+int CreateBiTree(SqBiTree T)
+{
+	char ch;
+	int i=0;
+	while(scanf("%c",&ch)==1&&ch!='\n')
+	{
+		if(ch==' ')
+		   T[i++]='\0';
+		else
+		   T[i++]=ch;
+	}
+	return TRUE
+}
+int CreateBiTree_Level(SqBiTree T)
+{
+	char ch;
+	int i=0;
+	while(scanf("%c",&ch)==1&&ch!='\n')
+	{
+		if(ch==' ')
+		   T[i++]='\0';
+		else
+		   T[i++]=ch;
+	}
+	return TRUE;
+}
+int CreateBiTree_Pre(SqBiTree T,int i)
+{
+	char ch;
+	scanf("%c",&ch);
+	if(ch==' ')
+	   T[i]='\0';
+	else
+	   {
+	   	  T[i]=ch;
+	   	  CreateBiTree_Pre(T,2*i+1);
+	   	  CreateBiTree_Pre(T,2*i+2);
+	   }
+	return TRUE;
+}
+int BiTreeLength(SqBiTree T)//按完全二叉树来 
+{
+	int len;
+	for(len=MAX_TREE_SIZE;len-1>=0;len--)
+	{
+		if(T[len-1]!='\0')
+		   break;
+	}
+	return TRUE;
+}
+int BiTreeDepth(SqBiTree T)//按完全二叉树来 
+{
+	int level=0;
+	while((int)pow(2,level)-1<BiTreeLength(T))
+	{
+		level++;
+	}
+	return level;
+}
+int Root(SqBiTree T,TElemType *e)
+{
+	if(BiTreeEmpty(T))
+	   return FALSE;
+	*e=T[0];
+	return TRUE;
+}
+TElemType Value(SqBiTree T,Position s)
+{
+	int i=(int)pow(2,s.level-1)+s.order-2;
+	return T[i];
+}
+int Assign_Value(SqBiTree T,Position s,TElemType value)
+{
+	int i=(int)pow(2,s.level-1)+s.order-2;
+	if(value=='\0'&&(T[2*i+1]!='\0'||T[2*i+2]!='\0'))
+	    return FALSE;
+	else if(value!='\0'&&T[(i+1)/2-1]=='0')
+	    return FALSE;
+	else
+	    T[i]=value;
+	return TRUE;
+}
+int Parent(SqBiTree T,TElemType e)
+{
+	int i;
+	if(T[0]!='\0')
+	{
+		for(i=0;i<MAX_TREE_SIZE;i++)
+		{
+			if(T[i]==e)
+			   return T[(i+1)/2-1];
+		}
+	}
+	return '\0';
+}
+int LeftChild(SqBiTree T,TElemType e)
+{
+	int i;
+	if(T[0]!='\0')
+	{
+		for(i=0;i<MAX_TREE_SIZE;i++)
+		{
+			if(T[i]==e)
+			   return T[2*i+1];
+		}
+	}
+	return '\0';
+}
+int RightChild(SqBiTree T,TElemType e)
+{
+	int i;
+	if(T[0]!='\0')
+	{
+		for(i=0;i<MAX_TREE_SIZE;i++)
+		{
+			if(T[i]==e)
+			   return T[2*i+2];
+		}
+	}
+	return '\0';
+}
+int Leftsibling(SqBiTree T,int e)
+{
+	int i;
+	if(T[0]!='\0')
+	{
+		for(i=0;i<MAX_TREE_SIZE;i++)
+		{
+			if(i%2==0&&T[i]==e)
+			{
+				return T[i-1];
+			}
+		}
+		}
+	}
+	return '\0';
+}
+int Rithtsibling(SqBiTree T,TElemType e)
+{
+	int i;
+	if(T[0]!='\0')
+	{
+		for(i=0;i<MAX_TREE_SIZE;i++)
+		{
+			if(i%2!=0&&T[i]==e)
+			{
+				return T[i+1];
+			}
+		}
+		}
+	}
+	return '\0';
+}
+void PreOrdefTraverse(SqBiTree T,void(Visit)(TElemType),int i)
+{
+	if(T[i]!='\0')
+	{
+		Visit(T[i]);
+		PreOrdefTraverse(T,Visit,2*i+1);
+		PreOrdefTraverse(T,Visit,2*i+1);
+	}
+}
+void LevelOrdefTraverse(SqBiTree T,void(Visit)(TElemType))
+{
+	int len=BiTreeLength;
+	for(int i=0;i<len;i++)
+	{
+		if(T[i]!='\0')
+		{
+			Visit[T[i]];	
+		}
+	}
+}
+void InOrdefTraverse(SqBiTree T,void(Visit)(TElemType),int i)
+{
+	if(T[i]!='\0')
+	{
+		InOrdefTraverse(T,Visit,2*i+1);
+		Visit(T[i]);
+		InOrdefTraverse(T,Visit,2*i+2);
+	}
+}
+void PastOrdefTraverse(SqBiTree T,void(Visit)(TElemType),int i)
+{
+	if(T[i]!='\0')
+	{
+		PastOrdefTraverse(T,Visit,2*i+1);
+		PastOrdefTraverse(T,Visit,2*i+2);
+		Visit(T[i]);
+}
+void Visit(TElemType)
+{
+	printf("%c",TElemType);//TElemTyoe改变时不要忘了改%c 
+}
