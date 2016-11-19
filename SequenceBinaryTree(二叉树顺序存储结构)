@@ -1,4 +1,5 @@
 //没有编译，小bug应该不少； 
+//注意二叉树不能销毁销毁
 #include<stdio.h>
 #include<stdlib.h>
 #define MAX_TREE_SIZE 100
