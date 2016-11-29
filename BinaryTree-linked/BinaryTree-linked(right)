@@ -1,4 +1,6 @@
+
 //it can work
+//stackoverflow一位老美给的
 #include<stdio.h>
 #include<stdlib.h>
 using namespace std;
