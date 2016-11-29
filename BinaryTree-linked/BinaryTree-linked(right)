@@ -1,0 +1,75 @@
+//it can work
+#include<stdio.h>
+#include<stdlib.h>
+using namespace std;
+typedef struct BiTNode
+{
+    char data;
+    struct BiTNode* rchild;
+    struct BiTNode* lchild;
+}BiTNode;
+typedef BiTNode BiTree;
+BiTree *CreateBiTree();
+void Visit(BiTree **T);
+void PreOrder(BiTree *T);
+void InOrder(BiTree *T);
+void PostOrder(BiTree *T);
+int main(void)
+{
+    BiTree *T;
+    T=CreateBiTree();
+    InOrder(T);
+    return 0;
+}
+BiTree *CreateBiTree()
+{
+    BiTree *T;
+    char data;
+    scanf(" %c",&data);
+        printf("............%c\n",data);
+
+    if(data=='#')
+        return NULL;
+
+    T=(BiTree *)malloc(sizeof(BiTree));
+    T->data=data;
+
+    printf("Enter left child of %c:\n",data);
+    T->lchild=CreateBiTree();
+
+    printf("Enter right child of %c:\n",data);
+    T->rchild=CreateBiTree();
+
+    return T;
+}
+void Visit(BiTree **T)
+{
+        printf("%c",(*T)->data);
+}
+void PreOrder(BiTree *T)
+{
+    if(T!=NULL)
+    {
+        Visit(&T);
+        PreOrder(T->lchild);
+        PreOrder(T->rchild);
+    }
+}
+void InOrder(BiTree *T)
+{
+	if(T!=NULL)
+	{
+		InOrder(T->lchild);
+		Visit(&T);
+		InOrder(T->rchild);
+	}
+}
+void PostOrder(BiTree *T)
+{
+	if(T!=NULL)
+	{
+		PostOrder(T->lchild);
+		PostOrder(T->rchild);
+		Visit(&T);
+	}
+}
