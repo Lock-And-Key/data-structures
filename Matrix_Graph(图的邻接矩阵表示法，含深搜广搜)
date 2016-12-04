@@ -1,0 +1,149 @@
+//InfoÈ«¶¼Ã»ÓÐÐ´ 
+#include<stdio.h>
+#include<stdlib.h>
+#define MAX_VERTEX_NUM 20
+typedef enum{DG,DN,UDG,UDN}GraghKind;//0-ÓÐÏòÍ¼,1-ÓÐÏòÍø,2-ÎÞÏòÍ¼£¬3-ÓÐÏòÍø£» 
+typedef struct { } InfoType; //
+typedef int VRType;
+typedef struct ArcCell
+{
+	VRType adj;
+	InfoType info;
+}ArcCell;
+typedef ArcCell AdjMatrix[MAX_VERTEX_NUM+1][MAX_VERTEX_NUM+1];
+typedef char VertexType;
+typedef struct
+{
+	VertexType vexs[MAX_VERTEX_NUM+1];
+	AdjMatrix arcs;
+	int vexnum,arcnum;
+	int IncInfo;
+	GraghKind kind;
+}Gragh;
+int visited[MAX_VERTEX_NUM+1];
+int main(void)
+{
+	
+}
+int Create(Gragh *G)
+{
+	int i,j,k;
+	VertexType v1,v2;
+	char tmp;
+	scanf("%d%d%d",&((*G).vexnum),&((*G).arcnum),&((*G).IncInfo));
+	scanf("%c",&tmp);
+	for(i=1;i<=(*G).vexnum;i++)
+	   scanf("%c",&((*G).vexs[i]));
+	for(i=1;i<=(*G).vexnum;i++)
+	{
+		for(j=1;j<=(*G).vexnum;j++)
+		   (*G).arcs[i][j].adj=0;
+	}
+	for(k=1;k<=(*G).arcnum;k++)
+	{
+		scanf("%c%c",&v1,&v2);
+		i=LocateVex(*G,v1);
+		j=LocateVex(*G,v2);
+		if(!i||!j)
+		   return 0;
+		(*G).arcs[i][j].adj=1;
+		if((*G).IncInfo==1)
+		{
+			//unknown
+		}
+		return 1;
+	}
+}
+int CreateDN(Gragh *G)
+{
+	int i,j,k;
+	VertexType v1,v2;
+	VRType w;
+	char tmp;
+	scanf("%d%d%d",&((*G).vexnum),&((*G).arcnum),&((*G).IncInfo));
+	scanf("%c",&tmp)//jump the 'enter' key
+	for(i=1;i<=(*G).vexnum;i++)
+	{
+		for(i=1;i<(*G).vexnum;i++)
+		  (*G).arcs[i][j].adj=0;
+	}
+	for(k=1;k<=(*G).arcnum;k++)
+	{
+		scanf("%c%c%d",&v1,&v2,&w);
+		i=LocateVex(*G,v1);
+		j=LocateVex(*G,v2);
+		if(!i||!j)
+		   return 0;
+		(*G).arcs[i][j].adj=w;
+		if((*G).IncInfo==1)
+		{
+			//unknown
+	    }
+	}
+	return 1;
+}
+int CreateUDG(MGragh *G)
+{
+	in i,j,k;
+	VertexType v1,v2;
+	char tmp;
+	scanf("%d%d%d",&((*G).vexnum),&((*G).arcnum),&((*G).IncInfo));
+	scanf("%c",&tmp);
+	for(i=1;i<=(*G).vexnum;i++)
+	{
+		for(j=1;j<=(*G).vexnum;j++)
+		    (*G).arcs[i][j].adj=0;
+	}
+	for(k=1;k<=(*G).arcnum;k++)
+	{
+		scanf("%c%c",&v1,&v2);
+		i=LocateVex(*G,v1);
+		j=LocateVex(*G,v2);
+		if(!i||!j)
+		   return 0;
+		(*G).arcs[i][j].adj=1;
+		if((*G).IncInfo==1)
+		{
+			//unknown
+		}
+		(*G).arcs[j][i]=(*G)arcs[i][j];
+	}
+	return 1;
+}
+int CreateUDN(Graph *G)
+{
+	int i,j,k;
+	VertexType v1,v2;
+	VRtype w;
+	char tmp;
+	scanf("%d%d%d",&((*G).vexnum),&((*G).arcnum),&((*G).IncInfo));
+	scanf("%c",&tmp);
+	for(i=1;i<=((*G).vexnum);i++)
+	   for(i=1;i<=((*G).vexnum);i++)
+	      (*G).arcs[i][j].adj=0;
+	for(k=1;k<=(*G).arcnum;k++)
+	{
+		scanf("%c%c%d",&v1,&v2,&w);
+		i=LocateVex(*G,v1);
+		j=LocateVex(*G,v2);
+		if(!i||!j)
+		   return 0;
+		(*G).arcs[i][j].adj=w;
+		if((*G).IncInfo==1)
+		{
+			//unknown
+		}
+		(*G).arcs[j][i]=(*G).arcs[i][j];
+	}
+	return 1;
+}
+int LocateVex(Grath G,VertexType u)
+{
+	int i;
+	for(i=1;i<=G.vexnum;i++)
+	{
+		if(G.vexs[i]==u)
+		   return i;
+	}
+	return 0;
+}
