@@ -1,114 +1,119 @@
 #include<stdio.h>
 #include<stdlib.h>
-#define TRUE 1
-#define FALSE 0
+#define OVERFLOW -2
+typedef int QElemType;
+typedef struct QNode
+{
+	QElemType data;
+	struct QNode *next;
+ }QNode;
+typedef QNode* QueuePtr;
 typedef struct
 {
-	int *elem;
-	int length;
-	int listsize;
-}SqList;
-
+	QueuePtr front;
+	QueuePtr rear;
+}LinkQueue;
+int InitQueue(LinkQueue *Q);
+void ClearQueue(LinkQueue *Q);
+void DestroyQueue(LinkQueue *Q);
+int QueueEmpty(LinkQueue Q);
+int QueueLength(LinkQueue Q);
+int EnQueue(LinkQueue *Q,QElemType e);
+int DeQueue(LinkQueue *Q,QElemType *e);
+void QueueTraverse(LinkQueue Q);
 int main(void)
 {
-	
-	
-	
-}
-
-
-int InitList_Sq(SqList *L)
-{
-	(*L).elem=(int *)malloc(5*sizeof(int));
-	if(!(*L).elem)
-	   exit(OVERFLOW)
-	(*L).length=0;
-	(*L).listsize=5;
-	return TRUE;
-}
-void ClearList_Sq(Sqlist *L)
-{
-	(*L).length=0;
-}
-void DestroyList_Sq(SqList *L)
-{
-	free((*L).elem);
-	(*L).elem=NULL;
-	(*L).length=0;
-	(*L).listsize=0;
-}
-int ListEmpty_Sq(SqList L)
-{
-	return L.length==0?TRUE:FALSE;	
-}
-int ListLength_Sq(SqList L)
-{
-	return L.length;
-}
-int GetElem_Sq(SqList L,int i,int *e)
-{
-	if(i<1||i>L.length)
-	  return ERROR;
-	else
-	  *e=L.elem[i-1];
-	return TRUE;
-}
-int LocateElem_Sq(SqList L,int e,int(Compare)(int,int))
-{
-	int i=1;
-	while(i<=L.length&&!Compare(e,L.elem[i-1]))
-	  i++;
-	if(i<=L.length)
-	  return i;
-	else
-	  return FALSE;
-}
-int PriorElem_Sq(SqList L,int cur_e,int *pre_e)
-{
-	int i=1;
-	if(L.elem[0]!=cur_e)
+	int a,b,e;
+	LinkQueue Q;
+	InitQueue(&Q);
+	for(a=0;a<5;a++)
 	{
-		while(i<L.length&&L.elem[i]!=cur_e)
-		   ++i;
-		if(i<L.length)
-		{
-			*pre_e=L.elem[i-1];
-			return TRUE;
-		}
+		scanf("%d",&b);
+		EnQueue(&Q,b);
 	}
-	return FALSE;
+	QueueTraverse(Q);
+	DeQueue(&Q,&e);
+	QueueTraverse(Q);
+	printf("%d\n",QueueEmpty(Q));
 }
-int ListInsert_Sq(SqLsit *L,int i,int e)
+int InitQueue(LinkQueue *Q)
 {
-	int *newbase;
-	int *p,*q;
-	if(i<1||i>(*L).length+1)
-	   return FALSE;
-	if((*L).length>=(*L).listsize)
+	(*Q).front=((*Q).rear)=(QueuePtr)malloc(sizeof(QNode));
+	if(!(*Q).front)
+	  exit(OVERFLOW);
+	(*Q).front->next=NULL;
+	return 1;
+}
+void ClearQueue(LinkQueue *Q)
+{
+	(*Q).rear=(*Q).front->next;
+	while((*Q).rear)
 	{
-		newbase=(int *)realloc((*L).elem,((L).listsize+5)*sizeof(int));
-		if(!newbase)
-		   exit(OVERFLOW);
-		(*L).elem=newbase;
-		(*L).listsize+=5;
+		(*Q).front->next=(*Q).rear->next;
+		free((*Q).rear);
+		(*Q).rear=(*Q).front->next;
 	}
-	q=&(*L).elem[i-1];
-	for(p=&(*L).elem[(*L).length-1];p>=q;--p)
-	 *(p+1)=*p;
-	*q=e;
-	(*L).length++;
+	(*Q).rear=(*Q).front;
 }
-int ListDelete_Sq(SqList *L,int i,int *e)
+void DestroyQueue(LinkQueue *Q)
 {
-	int j;
-	int *p,*q;
-	if(i<1||i>(*L).length)
-	   return FALSE;
-	p=&(*L).elem[i-1];
-	*e=*p;
-	q=(*L).elem+(*L).length-1;
-	for(++p;p<=q;++p)
-	  *(p-1)=*p;
-	(*L).length--;
-	return TRUE;
+	while((*Q).front)
+	{
+		(*Q).rear=(*Q).front->next;
+		free((*Q).front);
+		(*Q).front=(*Q).rear;
+	}
+}
+int QueueEmpty(LinkQueue Q)
+{
+	if(Q.front==Q.rear)
+	   return 1;
+	else
+	   return 0;
+}
+int QueueLength(LinkQueue Q)
+{
+	int count=0;
+	QueuePtr p=Q.front;
+	while(p!=Q.rear)
+	{
+		count++;
+		p=p->next;
+	}
+	return count;
+}
+int EnQueue(LinkQueue *Q,QElemType e)
+{
+	QueuePtr p;
+	p=(QueuePtr)malloc(sizeof(QNode));
+	if(!p)
+	  exit(OVERFLOW);
+	p->data=e;
+	p->next=NULL;
+	(*Q).rear->next=p;
+	(*Q).rear=p;
+	return 1;
+}
+int DeQueue(LinkQueue *Q,QElemType *e)
+{
+	QueuePtr p;
+	if((*Q).front==(*Q).rear)
+	   return 0;
+	p=(*Q).front->next;
+	*e=p->data;
+	(*Q).front->next=p->next;
+	if((*Q).rear==p)
+	   (*Q).rear=(*Q).front;
+	free(p);
+	return 1;
+}
+void QueueTraverse(LinkQueue Q)
+{
+	QueuePtr p;
+	p=Q.front->next;
+	while(p)
+	{
+		printf("%d\n",p->data);
+		p=p->next;
+	}
 }
