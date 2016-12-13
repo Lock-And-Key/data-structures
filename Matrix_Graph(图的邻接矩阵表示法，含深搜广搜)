@@ -1,149 +1,472 @@
-//FDSFSLFSL
+/*
+2
+6 7 0
+1 2 3 4 5 6
+1 2
+1 3
+2 4
+2 5
+3 6
+4 5
+5 6 
+*/ 
 #include<stdio.h>
+
 #include<stdlib.h>
+#include<limits.h>
+#include<queue>
 #define MAX_VERTEX_NUM 20
-typedef enum{DG,DN,UDG,UDN}GraghKind;//0-ÓÐÏòÍ¼,1-ÓÐÏòÍø,2-ÎÞÏòÍ¼£¬3-ÓÐÏòÍø£» 
+#define INFINITY INT_MAX
+
+typedef enum{DG,DN,UDG,UDN}GraghKind;//0-óD?òí?,1-óD?òí?,2-?T?òí?￡?3-óD?òí?￡? 
+
 typedef struct { } InfoType; //
+
 typedef int VRType;
+
+
 typedef struct ArcCell
+
 {
+
 	VRType adj;
+
 	InfoType info;
+
 }ArcCell;
+
 typedef ArcCell AdjMatrix[MAX_VERTEX_NUM+1][MAX_VERTEX_NUM+1];
+
 typedef char VertexType;
+
 typedef struct
+
 {
+
 	VertexType vexs[MAX_VERTEX_NUM+1];
+
 	AdjMatrix arcs;
+
 	int vexnum,arcnum;
+
 	int IncInfo;
+
 	GraghKind kind;
-}Gragh;
+
+}Graph;
+
 int visited[MAX_VERTEX_NUM+1];
+int CreateGraph(Graph *G);
+int CreateDG(Graph *G);
+int CreateDN(Graph *G);
+int CreateUDG(Graph *G);
+int CreateUDN(Graph *G);
+int LocateVex(Graph G,VertexType u);
+int FirstAdjVex(Graph G,VertexType v);
+int NextAdjVex(Graph G,VertexType v,VertexType w);
+void DFSTraverse(Graph G);
+void DFS(Graph G,int v);
+void OutputGraph(Graph G);
+void BFSTraverse(Graph G);
+std::queue<int> Q;
 int main(void)
+
 {
-	
+	Graph G;
+	CreateGraph(&G);
+	OutputGraph(G);
+	//DFS(G,1);
+	BFSTraverse(G);
 }
-int Create(Gragh *G)
+
+int CreateGraph(Graph *G)
+
+{
+	scanf("%d",&((*G).kind));
+	switch((*G).kind)
+	{
+		case DG:
+			return CreateDG(G);
+		case DN:
+			return CreateDN(G);
+		case UDG:
+			return CreateUDG(G);
+		case UDN:
+		    return CreateUDN(G);
+		default:
+			return 0;
+	}
+}
+int CreateDG(Graph *G)
 {
 	int i,j,k;
+
 	VertexType v1,v2;
+
 	char tmp;
+
 	scanf("%d%d%d",&((*G).vexnum),&((*G).arcnum),&((*G).IncInfo));
+
 	scanf("%c",&tmp);
+
 	for(i=1;i<=(*G).vexnum;i++)
+
 	   scanf("%c",&((*G).vexs[i]));
+
 	for(i=1;i<=(*G).vexnum;i++)
+
 	{
+
 		for(j=1;j<=(*G).vexnum;j++)
+
 		   (*G).arcs[i][j].adj=0;
+
 	}
+
 	for(k=1;k<=(*G).arcnum;k++)
+
 	{
+
 		scanf("%c%c",&v1,&v2);
+
 		i=LocateVex(*G,v1);
+
 		j=LocateVex(*G,v2);
+
 		if(!i||!j)
+
 		   return 0;
+
 		(*G).arcs[i][j].adj=1;
+
 		if((*G).IncInfo==1)
+
 		{
+
 			//unknown
+
 		}
+
 		return 1;
+
 	}
 }
-int CreateDN(Gragh *G)
+
+int CreateDN(Graph *G)
+
 {
+
 	int i,j,k;
+
 	VertexType v1,v2;
+
 	VRType w;
+
 	char tmp;
+
 	scanf("%d%d%d",&((*G).vexnum),&((*G).arcnum),&((*G).IncInfo));
-	scanf("%c",&tmp)//jump the 'enter' key
+
+	scanf("%c",&tmp);//jump the 'enter' key
 	for(i=1;i<=(*G).vexnum;i++)
+	    scanf("%c",&((*G).vexs[i]));
+
+
+	for(i=1;i<=(*G).vexnum;i++)
+
 	{
+
 		for(i=1;i<(*G).vexnum;i++)
+
 		  (*G).arcs[i][j].adj=0;
+
 	}
+
 	for(k=1;k<=(*G).arcnum;k++)
+
 	{
+
 		scanf("%c%c%d",&v1,&v2,&w);
+
 		i=LocateVex(*G,v1);
+
 		j=LocateVex(*G,v2);
+
 		if(!i||!j)
+
 		   return 0;
+
 		(*G).arcs[i][j].adj=w;
+
 		if((*G).IncInfo==1)
+
 		{
+
 			//unknown
+
 	    }
+
 	}
+
 	return 1;
+
 }
-int CreateUDG(MGragh *G)
+
+int CreateUDG(Graph *G)
+
 {
-	in i,j,k;
+    printf("haha\n");//!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	int i,j,k;
+
 	VertexType v1,v2;
+
 	char tmp;
+
 	scanf("%d%d%d",&((*G).vexnum),&((*G).arcnum),&((*G).IncInfo));
+
 	scanf("%c",&tmp);
+	printf("haha\n");//!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	for(i=1;i<=(*G).vexnum;i++)
 	{
+		    scanf("%c",&((*G).vexs[i]));
+			scanf("%c",&tmp);
+			printf("%d\n",i);
+	}
+    printf("haha\n");	printf("%d %d\n",i,(*G).vexnum);	//!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	for(i=1;i<=(*G).vexnum;i++)
+
+	{
+
 		for(j=1;j<=(*G).vexnum;j++)
+
 		    (*G).arcs[i][j].adj=0;
+
 	}
+
 	for(k=1;k<=(*G).arcnum;k++)
+
 	{
-		scanf("%c%c",&v1,&v2);
+
+		scanf("%c %c",&v1,&v2);
+		scanf("%c",&tmp);
+        printf("haha\n");//!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		i=LocateVex(*G,v1);
+
 		j=LocateVex(*G,v2);
+
 		if(!i||!j)
+
 		   return 0;
+
 		(*G).arcs[i][j].adj=1;
+
 		if((*G).IncInfo==1)
+
 		{
+
 			//unknown
+
 		}
-		(*G).arcs[j][i]=(*G)arcs[i][j];
-	}
-	return 1;
-}
-int CreateUDN(Graph *G)
-{
-	int i,j,k;
-	VertexType v1,v2;
-	VRtype w;
-	char tmp;
-	scanf("%d%d%d",&((*G).vexnum),&((*G).arcnum),&((*G).IncInfo));
-	scanf("%c",&tmp);
-	for(i=1;i<=((*G).vexnum);i++)
-	   for(i=1;i<=((*G).vexnum);i++)
-	      (*G).arcs[i][j].adj=0;
-	for(k=1;k<=(*G).arcnum;k++)
-	{
-		scanf("%c%c%d",&v1,&v2,&w);
-		i=LocateVex(*G,v1);
-		j=LocateVex(*G,v2);
-		if(!i||!j)
-		   return 0;
-		(*G).arcs[i][j].adj=w;
-		if((*G).IncInfo==1)
-		{
-			//unknown
-		}
+
 		(*G).arcs[j][i]=(*G).arcs[i][j];
+
 	}
+
 	return 1;
+
 }
-int LocateVex(Grath G,VertexType u)
+
+int CreateUDN(Graph *G)
+
 {
-	int i;
-	for(i=1;i<=G.vexnum;i++)
+
+	int i,j,k;
+
+	VertexType v1,v2;
+
+	VRType w;
+
+	char tmp;
+
+	scanf("%d%d%d",&((*G).vexnum),&((*G).arcnum),&((*G).IncInfo));
+
+	scanf("%c",&tmp);
+	for(i=1;i<=(*G).vexnum;i++)
+	    scanf("%c",&((*G).vexs[i]));
+
+
+	for(i=1;i<=((*G).vexnum);i++)
+
+	   for(i=1;i<=((*G).vexnum);i++)
+
+	      (*G).arcs[i][j].adj=0;
+
+	for(k=1;k<=(*G).arcnum;k++)
+
 	{
+
+		scanf("%c%c%d",&v1,&v2,&w);
+
+		i=LocateVex(*G,v1);
+
+		j=LocateVex(*G,v2);
+
+		if(!i||!j)
+
+		   return 0;
+
+		(*G).arcs[i][j].adj=w;
+
+		if((*G).IncInfo==1)
+
+		{
+
+			//unknown
+
+		}
+
+		(*G).arcs[j][i]=(*G).arcs[i][j];
+
+	}
+
+	return 1;
+
+}
+
+int LocateVex(Graph G,VertexType u)
+
+{
+
+	int i;
+
+	for(i=1;i<=G.vexnum;i++)
+
+	{
+
 		if(G.vexs[i]==u)
+
 		   return i;
+
+	}
+
+	return 0;
+
+}
+int FirstAdjVex(Graph G,VertexType v)
+{
+	int k,j,t;
+	k=LocateVex(G,v);
+	if(k)
+	{
+		if(G.kind%2)
+		{
+				   t=INFINITY;	
+		}
+		else
+		   t=0;
+		for(j=1;j<=G.vexnum;j++)
+		{
+			if(G.arcs[k][j].adj!=t)
+			   return j;
+		}
 	}
 	return 0;
+}
+int NextAdjVex(Graph G,VertexType v,VertexType w)
+{
+	int k1,k2,j,t;
+	k1=LocateVex(G,v);
+	k2=LocateVex(G,w);
+	if(k1&&k2)
+	{
+		if(G.kind%2)
+		   {
+		   	t=INFINITY;
+		   }
+		else
+		   t=0;
+		for(j=k2+1;j<=G.vexnum;j++)
+		{
+			if(G.arcs[k1][j].adj!=t)
+			   return j;
+		}
+	}
+}
+void DFSTraverse(Graph G)
+{
+	int v;
+	for(v=1;v<=G.vexnum;v++)
+	     visited[v]=0;
+	for(v=1;v<=G.vexnum;v++)
+	{
+		if(!visited[v])
+		   DFS(G,v);
+	}
+}
+void DFS(Graph G,int v)
+{
+	int w;
+	visited[v]=1;
+	printf("%c",G.vexs[v]);
+	for(w=FirstAdjVex(G,G.vexs[v]);w;w=NextAdjVex(G,G.vexs[v],G.vexs[w]))
+	{
+		if(!visited[w])
+		   DFS(G,w);
+	}
+}
+void BFSTraverse(Graph G)
+{
+	printf("haha\n");//!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	int v,w;
+	VertexType e;
+	for(v=1;v<=G.vexnum;v++)
+	    visited[v]=0;
+	for(v=1;v<=G.vexnum;v++)
+	{
+		if(!visited[v])
+		{
+			visited[v]=1;
+			printf("%c",G.vexs[v]);
+			Q.push(v);
+			while(!Q.empty())
+			{
+				e=Q.front();
+				printf("%d!!!\n",e);//!!!!!!!!!!!!!!
+				Q.pop();
+				for(w=FirstAdjVex(G,G.vexs[e]);w;w=NextAdjVex(G,G.vexs[e],G.vexs[w]))
+				{
+					if(!visited[w])
+			        {
+						visited[w]=1;
+						printf("%c",G.vexs[w]);
+						Q.push(w);		
+					}
+				}
+			}
+		}
+	}
+}
+void OutputGraph(Graph G)
+{
+	int i,j;
+	if(!G.vexnum&&!G.arcnum)
+	   printf("It's empty!\n'");
+	else
+	{
+		printf("  ");
+		for(i=1;i<=G.vexnum;i++)
+		   printf("%2c ",G.vexs[i]);
+		printf("\n");
+		for(i=1;i<=G.vexnum;i++)
+		{
+			printf("%c ",G.vexs[i]);
+			for(j=1;j<=G.vexnum;j++)
+			{
+				if(G.arcs[i][j].adj==INFINITY)
+				   printf("∞ ");
+				else
+				   printf("%2d ",G.arcs[i][j]);
+			}
+			printf("\n");
+		}
+	}
 }
