@@ -1,0 +1,51 @@
+罗技MX Master//Search Table
+#include<stdio.h>
+#include<stdlib.h>
+typedef int KeyType;
+typedef struct
+{
+	int key;
+	float weight;
+}ElemType_Search;
+typedef struct
+{
+	ElemType_Search *elem;
+	int length;
+}Table;
+int Create(Table *T,int n)
+{
+	int i;
+	int a;
+	float b;
+	T->elem=(ElemType_Search *)malloc((n+1)*sizeof(ElemType_Search));
+	if(!(T->elem))
+	   exit(OVERFLOW);
+	for((*T).length=0,i=1;i<=n;i++)
+	{
+		if(scanf("%d%f",&a,&b)==2)
+		{
+			(*T).elem[i].key=a;
+			(*T).elem[i].weight=b;
+			(*T).length++;
+		}
+	}
+	return 1;
+}
+void Destroy(Table *T)
+{
+	if(T->elem)
+	  free(T->elem);
+	T->elem=NULL;
+	T->length=0;
+}
+void Traverse(Table T)
+{
+	int i;
+	for(i=0;i<T.length;i++)
+	{
+		if(i&&!(i%10))
+		printf("\n");
+		printf("%d",T.elem[i+1]);
+	}
+}
+
