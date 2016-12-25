@@ -26,6 +26,7 @@ status PriorElem_L(LinkList L, int cur_e, int *pre_e);//用pre_e接收cur_e的�
 status NextElem_L(LinkList L,int cur_e,int *next_e);
 status ListInsert_L(LinkList L, int i, int e);//在单链表L第i个位置之前插入e.
 status ListDelete_L(LinkList L,int i,int *e);//删除单链表L第i个位置的值，并用e接收
+int Delete_Element(LinkList L,int e,int n);//delete all the elements which values 'e'
 int main(void)
 {
 LinkList L1, L2;
@@ -211,4 +212,26 @@ q=p->next;
 p->next=q->next;
 free(q);
 return TURE;
+}
+int Delete_Element(LinkList L,int e,int n)//delete all the elements which equals to 'e'
+
+{
+
+LinkList p=L,q;
+
+while(--n)
+{
+	q=p->next;
+	if(q->data==e)
+	{
+		p->next=q->next;
+		free(q);
+		q=p->next;
+	}
+	else
+	{
+		p=q;
+	    q=q->next;
+	}
+	
 }
