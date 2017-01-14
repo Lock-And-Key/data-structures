@@ -1,59 +1,222 @@
-//未测试 ，可以帮忙改一下小BUG 
-#define MAXQSIZE 1000
+#include<stdlib.h>
+#include<stdio.h>
+typedef int LElemType_DC;
 #define OVERFLOW -2
-#define TRUE 1
-#define FALSE -1
-typedef int QElemType_CSq;
-typedef struct
+typedef struct DuLNode
 {
-	QElemType_CSq *base;
-	int front;
-	int rear;
-}CSqQueue;
-int InitQueue(CSqQueue *Q)
+	LElemType_DC data;
+	struct DuLNode *prior;
+	struct DuLNode *next;
+}DuLNode;
+typedef DuLNode* DuLinkList;
+int InialList_DuL(DuLinkList *L);
+int ClearList_DuL(DuLinkList L);
+void DestroyList_DuL(DuLinkList *L);
+int If_Empty_DuL(DuLinkList L);
+int ListLength_DuL(DuLinkList L);
+int GetElem_DuL(DuLinkList L, int i, LElemType_DC *e);
+int LocateElem_DuL(DuLinkList L, LElemType_DC e);
+int PriorElem_DuL(DuLinkList L, LElemType_DC cur_e, LElemType_DC *pre_e);
+int NextElem_DuL(DuLinkList L, LElemType_DC cur_e, LElemType_DC *next_e);
+DuLinkList GetElemPtr_DuL(DuLinkList L, int i);
+int ListInsert_DuL(DuLinkList L, int i, LElemType_DC e);
+int ListDelete_DuL(DuLinkList L, int i, LElemType_DC *e);
+void ListTraverse_DuL(DuLinkList L);
+int main(void)
 {
-	(*Q).base=(QElemType_CSq *)malloc(MAXQSIZE*sizeof(QElemtype_CSq));
-	if(!(*Q).base)
-	   exit(OVERFLOW);
-	(*Q).front=(*Q).rear=0;
-	return TRUE;
+	int i,n,e;
+	DuLinkList L;
+	InialList_DuL(&L);
+	printf("Please enter the number of the nodes:");
+	scanf_s("%d", &n);
+	for (i = 1;i < = n;i++)
+	{
+		printf("Please enter the value of %dth node: ", i);
+		scanf_s("%d", &e);
+		ListInsert_DuL(L, i, e);
+	}
+	ListTraverse_DuL(L);
+
 }
-void ClearQueue_CSq(CSqQueue *Q)
+int InialList_DuL(DuLinkList *L)
 {
-	(*Q).front=(*Q).rear=0;
+	*L = (DuLinkList)malloc(sizeof(DuLNode));
+	if (!(*L))
+	{
+		printf("OVERFLOW!\n");
+		exit(OVERFLOW);
+	}
+	(*L)->next = (*L)->prior = *L;
+	return 1;
 }
-void DestroyQueue_CSq(CSqQueue *Q)
+int ClearList_DuL(DuLinkList L)
 {
-	if((*Q).base)
-	   free((*Q).base);
-	(*Q).base=NULL;
-	(*Q).front=(*Q).rear=0;
+	DuLinkList p, q;
+	p = L->next;
+	while (p != L)
+	{
+		q = p->next;
+		free(p);
+		p = q;
+	}
+	L->next = L->prior = L;
+	return 1;
 }
-int QueueEmpty_CSq(CSqQueue Q)
+void DestroyList_DuL(DuLinkList *L)
 {
-	if(Q.front==Q.rear)
-	  return TRUE;
+	ClearList_DuL(*L);
+	free(*L);
+	*L = NULL;
+}
+int If_Empty_DuL(DuLinkList L)
+{
+	if (L&&(L->next == L) && (L->prior == L))
+		return 1;
 	else
-	  return FALSE;
+		return 0;
 }
-int QueueLength_CSq(CSqQueue Q)
+int ListLength_DuL(DuLinkList L)
 {
-	return (Q.rear-Q.front+MAXQSIZE)%MAXQSIZE;
+	DuLinkList p;
+	int count;
+	if (L)
+	{
+		count = 0;
+		p = L;
+		while (p->next != L)
+		{
+			count++;
+			p = p->next;
+		}
+	}
+	return count;
 }
-int GetHead_CSq(CSqQueue Q,QElemType_CSq *e)
+int GetElem_DuL(DuLinkList L, int i, LElemType_DC *e)
 {
-	if(Q.front==Q.rear)
-	   return FALSE;
-	*e=Q.base[Q.front];
-	return OK;
+	DuLinkList p;
+	int count;
+	if (L)
+	{
+		count = 1;
+		p = L->next;
+		while (p != L&&count < i)
+		{
+			count++;
+			p = p->next;
+		}
+		if (p != L)
+		{
+			*e = p->data;
+			return 1;
+		}
+	}
+	return 0;
 }
-int DeQueue_CSq(CSqQueue *Q,QElemType_CSq *e)
+int LocateElem_DuL(DuLinkList L, LElemType_DC e)
 {
-	if((*Q).front==(*Q).rear)
-	   return FALSE;
-	*e=(*Q).front;
-	(*Q).front=((*Q).front+1)%MAXQSIZE;
-	return TRUE;
+	DuLinkList p;
+	int count;
+	if (L)
+	{
+		count = 1;
+		p = L->next;
+		while (p != L && (e != p->data))
+		{
+			count++;
+			p = p->next;
+		}
+		if (p != L)
+			return count;
+	}
+	return 0;
 }
-
-
+int PriorElem_DuL(DuLinkList L, LElemType_DC cur_e, LElemType_DC *pre_e)
+{
+	DuLinkList p;
+	if (L)
+	{
+		p = L->next;
+		while (p != L&&p->data != cur_e)
+			p = p->next;
+		if (p != L&&p->prior != L)
+		{
+			*pre_e = p->prior->data;
+			return 1;
+		}
+	}
+	return 1;
+}
+int NextElem_DuL(DuLinkList L, LElemType_DC cur_e, LElemType_DC *next_e)
+{
+	DuLinkList p;
+	if (L)
+	{
+		p = L->next;
+		while (p != L&&p->data != cur_e)
+			p = p->next;
+		if (p != L&&p->next != L)
+		{
+			*next_e = p->next->data;
+			return 1;
+		}
+	}
+	return 0;
+}
+DuLinkList GetElemPtr_DuL(DuLinkList L, int i)
+{
+	int count;
+	DuLinkList p;
+	if (L&&i > 0)
+	{
+		count = 1;
+		p = L->next;
+		while (p != L&&count < i)
+		{
+			count++;
+			p = p->next;
+		}
+		if (p != L)
+			return p;
+	}
+	return NULL;
+}
+int ListInsert_DuL(DuLinkList L, int i, LElemType_DC e)
+{
+	DuLinkList p, s;
+	if (i<1 || i>ListLength_DuL(L) + 1)
+		return 0;
+	p = GetElemPtr_DuL(L, i);
+	if (!p)
+		p = L;
+	s = (DuLinkList)malloc(sizeof(DuLNode));
+	if (!s)
+		exit(OVERFLOW);
+	s->data = e;
+	s->prior = p->prior;
+	s->next = p;
+	p->prior->next = s;
+	p->prior = s;
+	return 1;
+}
+int ListDelete_DuL(DuLinkList L, int i, LElemType_DC *e)
+{
+	DuLinkList p;
+	if (!(p = GetElemPtr_DuL(L, i)))
+		return 0;
+	*e = p->data;
+	p->prior->next = p->next;
+	p->next->prior = p->prior;
+	free(p);
+	p = NULL;
+	return 1;
+}
+void ListTraverse_DuL(DuLinkList L)
+{
+	DuLinkList p;
+	p = L->next;
+	while (p != L)
+	{
+		printf("%d ", p->data);
+		p = p->next;
+	}
+}
