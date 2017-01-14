@@ -55,24 +55,25 @@ status ListInsert_L(LinkList L, int i, int e);//在单链表L第i个位置之前
 status ListDelete_L(LinkList L, int i, int *e);//删除单链表L第i个位置的值，并用e接收
 
 int Delete_Element(LinkList L, int e, int n);//delete all the elements which values 'e'
-
+void MergeList_L(LinkList La, LinkList *Lb, LinkList *Lc);
 int main(void)
 
 {
-	int e,n, remain_node_num;
-	LinkList L;
-	InitialList(&L);
-	printf("请输入结点的个数：");
-	scanf_s("%d", &n);
-	CreateList_1(L, n);
-	show_linklist(L, n);
-	printf("请输入要删除的结点：");
-	scanf_s("%d", &e);
-	remain_node_num=Delete_Element(L, e, n);
-	show_linklist(L, remain_node_num);
+	int e, n[2], remain_node_num, i;
+	LinkList L[2], LM;
+	InitialList(&L[0]);
+	InitialList(&L[1]);
+	for (i = 0;i<2;i++)
+	{
+		printf("请输入结点的个数：");
+		scanf_s("%d", &n[i]);
+		CreateList_1(L[i], n[i]);
+		show_linklist(L[i], n[i]);
+	}
+	MergeList_L(L[0], &L[1], &LM);
+	show_linklist(LM, n[0] + n[1]);
 	return 0;
 }
-
 status InitialList(LinkList * L)
 
 {
@@ -88,8 +89,8 @@ status CreateList_1(LinkList L, int n)//头插法
 {
 
 	LinkList p;
-
-	for (int i = 0;i < n;i++)
+	int i;
+	for (i = 0;i < n;i++)
 
 	{
 
@@ -145,8 +146,8 @@ void show_linklist(LinkList L, int n)
 {
 
 	LinkList p = L->next;
-
-	for (int i = 0;i < n;i++)
+	int i;
+	for (i = 0;i < n;i++)
 
 	{
 
@@ -369,7 +370,7 @@ status ListInsert_L(LinkList L, int i, int e)//在单链表L第i个位置之前�
 	q->next = p->next;
 
 	p->next = q;
-
+	return 1;
 }
 
 status ListDelete_L(LinkList L, int i, int *e)//删除单链表L第i个位置的值，并用e接收
@@ -404,7 +405,7 @@ int Delete_Element(LinkList L, int e, int n)//delete all the elements which equa
 
 {
 
-	int remain_node_num=n;
+	int remain_node_num = n;
 
 	LinkList p = L, q;
 
@@ -421,26 +422,40 @@ int Delete_Element(LinkList L, int e, int n)//delete all the elements which equa
 		{
 
 			p->next = q->next;
-
 			free(q);
-
 			q = p->next;
 			remain_node_num--;
-
 		}
-
 		else
-
 		{
-
 			p = q;
-
 			q = q->next;
-
 		}
-
-
-
 	}
 	return remain_node_num;
+}
+void MergeList_L(LinkList La, LinkList *Lb, LinkList *Lc)
+{
+	LinkList pa, pb, pc;
+	pa = La->next;
+	pb = (*Lb)->next;
+	pc = *Lc = La;
+	while (pa&&pb)
+	{
+		if ((pa->data <  pb->data) || (pa->data = pb->data))
+		{
+			pc->next = pa;
+			pc = pa;
+			pa = pa->next;
+		}
+		else
+		{
+			pc->next = pb;
+			pc = pb;
+			pb = pb->next;
+		}
+	}
+	pc->next = pa ? pa : pb;
+	free(*Lb);
+	*Lb = NULL;
 }
